@@ -1,0 +1,11 @@
+defaultPlatforms:
+  - linux/amd64
+  - linux/arm64
+builds:
+  - flags:
+      - -trimpath
+      - -tags
+      - netgo
+    ldflags:
+      - -s -w
+      - -extldflags "-static"
