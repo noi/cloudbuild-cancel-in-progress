@@ -69,15 +69,15 @@ func cancelInProgressBuilds(
 		}
 	}()
 
-	var createTimeOfCurrentBuild string
-	if currentBuild, err := client.GetBuild(ctx, &cloudbuildpb.GetBuildRequest{
+	var createTime string
+	if build, err := client.GetBuild(ctx, &cloudbuildpb.GetBuildRequest{
 		Name: "projects/" + projectID + "/locations/" + location + "/builds/" + buildID,
 	}); err != nil {
 		return err
 	} else {
-		createTimeOfCurrentBuild = currentBuild.GetCreateTime().AsTime().Format(time.RFC3339Nano)
+		createTime = build.GetCreateTime().AsTime().Format(time.RFC3339Nano)
 	}
-	filter = fmt.Sprintf(`(status="QUEUED" OR status="WORKING" OR status="PENDING") AND create_time<=%q AND build_id!=%q AND (%s)`, createTimeOfCurrentBuild, buildID, filter)
+	filter = fmt.Sprintf(`(status="QUEUED" OR status="WORKING" OR status="PENDING") AND create_time<%q AND (%s)`, createTime, filter)
 	it := client.ListBuilds(ctx, &cloudbuildpb.ListBuildsRequest{
 		Parent: "projects/" + projectID + "/locations/" + location,
 		Filter: filter,
