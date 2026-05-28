@@ -18,10 +18,10 @@ https://hub.docker.com/r/noih/cloudbuild-cancel-in-progress
 
 ### About filter
 
-The `--filter` is transformed as follows and passed to [ListBuildsRequest](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2/cloudbuildpb#ListBuildsRequest).Filter, which is an argument of [ListBuilds](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2#Client.ListBuilds). ([cloud.google.com/go/cloudbuild](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2) is used as the Cloud Build API client.)
+The `--filter` is transformed as follows and passed to [ListBuildsRequest.Filter](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2/cloudbuildpb#ListBuildsRequest), which is an argument of [ListBuilds](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2#Client.ListBuilds). ([cloud.google.com/go/cloudbuild](https://pkg.go.dev/cloud.google.com/go/cloudbuild/apiv1/v2) is used as the Cloud Build API client.)
 
 ```
-(status="QUEUED" OR status="WORKING" OR status="PENDING") AND create_time<="{build-create-time}" AND build_id!="{build-id}" AND ({filter})
+(status="QUEUED" OR status="WORKING" OR status="PENDING") AND create_time<"{build-create-time}" AND ({filter})
 ```
 
 ## How to use
@@ -33,7 +33,7 @@ An example of canceling older runs keyed by trigger name and branch/tag name.
 ```yaml
 steps:
   - id: 'cancel-in-progress'
-    name: 'noih/cloudbuild-cancel-in-progress:0.1.0'
+    name: 'noih/cloudbuild-cancel-in-progress:0.1.1'
     args:
       - '--project-id=$PROJECT_ID'
       - '--location=$LOCATION'
@@ -53,7 +53,7 @@ An example of canceling older runs keyed by trigger tag.
 ```yaml
 steps:
   - id: 'cancel-in-progress'
-    name: 'noih/cloudbuild-cancel-in-progress:0.1.0'
+    name: 'noih/cloudbuild-cancel-in-progress:0.1.1'
     args:
       - '--project-id=$PROJECT_ID'
       - '--location=$LOCATION'
